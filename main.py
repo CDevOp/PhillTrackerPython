@@ -33,22 +33,32 @@ def get_stats():
 
     if response is not None:
         html = BeautifulSoup(response, 'html.parser')
-        names = set()
-        for li in html.find_all('div', class_="player-overview__bio"):
-            for name in li.text.split('\n'):
-                if len(name) > 0:
-                    names.add(name.strip())
-        return list(names)
+        stats = set()
+        for li in html.find_all('li', class_="player-bio__item"):
+            for stat in li.text.split('span'):
 
-    # Raise an exception if we failed to get any data from the url
+                if len(stat) > 0:
+                    stats.add(stat.strip())
+        return list(stats)
+
     raise Exception('Error retrieving contents at {}'.format(url))
 
 
 if __name__ == '__main__':
-    print('Getting the list of names....')
-    names = get_stats()
-    print('... done.\n')
+    print('\nGetting Phils stats....')
+    stats = get_stats()
+    print('...done.\n')
 
-    print('\nPhilly boys stats...:\n')
-    for name in names:
-        print(name)
+    for stat in stats:
+        print(stat)
+
+    print('\n\n')
+    stats = [x.replace('\n', ' ') for x in stats]
+    stats = [x.replace(' ', '') for x in stats]
+
+    print('-----------------------------------')
+    print(stats)
+    print('-----------------------------------')
+
+    for stat in stats:
+        print(stat)
